@@ -1,0 +1,8 @@
+{
+  "name": "harvins-cafe-menu",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Digital QR menu for Harvin's Cafe & Bistro, Lucknow",
+  "scripts": { "start": "node server.js" },
+  "engines": { "node": ">=18" }
+}

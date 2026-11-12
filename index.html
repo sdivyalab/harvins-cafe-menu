@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=5">
+<title>Harvin's Menu</title>
+<meta name="description" content="Digital menu for Harvin's Cafe & Bistro, Vikas Nagar, Lucknow. Coffee, cold brews, shakes and food.">
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="theme-color" content="#20160f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Harvin's Menu">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><circle cx='32' cy='32' r='32' fill='%23bd742a'/><text x='32' y='45' font-family='Georgia,serif' font-size='40' font-weight='700' fill='%23ffffff' text-anchor='middle'>H</text></svg>">
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><circle cx='90' cy='90' r='90' fill='%23bd742a'/><text x='90' y='126' font-family='Georgia,serif' font-size='112' font-weight='700' fill='%23ffffff' text-anchor='middle'>H</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..600&family=DM+Sans:opsz,wght@9..40,400..700&family=Space+Grotesk:wght@500;600&display=swap">
+<style>
+/* =========================================================
+   HARVIN'S — digital table menu (mobile-first "app")
+   Layout: single phone-width column; sticky brand header +
+   category chips; grouped item rows; fixed action bar.
+   ========================================================= */
+:root{
+  --bg:#f7f1e8; --surface:#fffaf3; --fg:#2a1f18; --muted:#6f5d4e;
+  --accent:#bd742a; --accent-2:#4f6146; --line:#e6d8c5;
+  --espresso:#20160f; --espresso-fg:#f2e7d6; --espresso-muted:#c3af98;
+  --veg:#3a9d53; --nonveg:#c0392b;
+  --display:"Fraunces","Georgia",serif;
+  --body:"DM Sans","Segoe UI",system-ui,sans-serif;
+  --label:"Space Grotesk","DM Sans",sans-serif;
+  --col:480px;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#140e09; --surface:#211810; --fg:#f1e7d8; --muted:#b6a391;
+    --accent:#e0a14e; --accent-2:#90a67d; --line:#352719;
+    --espresso:#0e0a06; --espresso-fg:#f1e7d8; --espresso-muted:#b19d86;
+    --veg:#4fb869; --nonveg:#e05a4a; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#140e09; --surface:#211810; --fg:#f1e7d8; --muted:#b6a391;
+  --accent:#e0a14e; --accent-2:#90a67d; --line:#352719;
+  --espresso:#0e0a06; --espresso-fg:#f1e7d8; --espresso-muted:#b19d86;
+  --veg:#4fb869; --nonveg:#e05a4a; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--espresso);color:var(--fg);font-family:var(--body);
+  -webkit-font-smoothing:antialiased;line-height:1.5}
+.app{max-width:var(--col);margin:0 auto;background:var(--bg);min-height:100%;
+  box-shadow:0 0 60px -20px rgba(0,0,0,.4);position:relative}
+
+/* header */
+.app-head{background:var(--espresso);color:var(--espresso-fg);position:relative;overflow:hidden;
+  padding:calc(env(safe-area-inset-top,0px) + 22px) max(18px,env(safe-area-inset-left,0px)) 26px
+          max(18px,env(safe-area-inset-right,0px))}
+.app-head::before{content:"";position:absolute;inset:0;
+  background:radial-gradient(70% 60% at 85% 0%,rgba(189,116,42,.28),transparent 60%)}
+.app-head .in{position:relative}
+.brand{display:flex;align-items:center;gap:11px}
+.brand .mark{width:42px;height:42px;border-radius:50%;flex:none;
+  background:radial-gradient(circle at 32% 30%,var(--accent),#8a5118 72%);display:grid;place-items:center;
+  color:#fff;font-family:var(--display);font-weight:700;font-size:1.3rem;box-shadow:inset 0 0 0 2px rgba(255,255,255,.22)}
+.brand b{font-family:var(--display);font-weight:600;font-size:1.3rem;line-height:1;display:block}
+.brand small{font-family:var(--label);font-size:.58rem;letter-spacing:.28em;text-transform:uppercase;color:var(--espresso-muted)}
+.head-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:18px}
+.menu-label{font-family:var(--label);font-size:.66rem;letter-spacing:.24em;text-transform:uppercase;color:var(--espresso-muted)}
+.menu-label strong{display:block;font-family:var(--display);font-size:1.5rem;font-weight:600;letter-spacing:0;
+  text-transform:none;color:var(--espresso-fg);margin-top:2px}
+.pill{display:inline-flex;align-items:center;gap:7px;font-family:var(--label);font-weight:600;font-size:.72rem;
+  background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:.45em .8em;color:var(--espresso-fg)}
+.pill .dot{width:8px;height:8px;border-radius:50%;background:var(--accent-2)}
+.pill.closed .dot{background:var(--espresso-muted)}
+
+/* sticky controls */
+.controls{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 92%,transparent);
+  backdrop-filter:blur(10px);border-bottom:1px solid var(--line);
+  padding:12px max(14px,env(safe-area-inset-left,0px)) 10px max(14px,env(safe-area-inset-right,0px))}
+.search{display:flex;align-items:center;gap:9px;background:var(--surface);border:1.5px solid var(--line);
+  border-radius:12px;padding:.6em .85em}
+.search svg{flex:none;color:var(--muted)}
+.search input{border:none;background:none;outline:none;font-family:var(--body);font-size:1rem;color:var(--fg);width:100%}
+.chips{display:flex;gap:8px;overflow-x:auto;margin-top:10px;padding-bottom:2px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chips button{flex:none;font-family:var(--label);font-weight:600;font-size:.82rem;white-space:nowrap;
+  background:var(--surface);border:1.5px solid var(--line);border-radius:999px;padding:.5em 1em;color:var(--fg);cursor:pointer;transition:.15s}
+.chips button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+
+/* menu body */
+.menu{padding:10px max(16px,env(safe-area-inset-left,0px)) 120px max(16px,env(safe-area-inset-right,0px))}
+.cat{padding-top:22px;scroll-margin-top:118px}
+.cat h2{font-family:var(--display);font-size:1.35rem;font-weight:600;display:flex;align-items:center;gap:10px}
+.cat h2::after{content:"";height:1px;flex:1;background:var(--line)}
+.cat .cn{font-family:var(--label);font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);
+  background:color-mix(in srgb,var(--accent) 13%,transparent);border-radius:6px;padding:3px 7px}
+.item{display:flex;gap:12px;align-items:flex-start;padding:16px 0;border-bottom:1px solid var(--line)}
+.item:last-child{border-bottom:none}
+.veg{width:15px;height:15px;flex:none;border:1.6px solid var(--veg);border-radius:3px;display:grid;place-items:center;margin-top:4px}
+.veg::after{content:"";width:7px;height:7px;border-radius:50%;background:var(--veg)}
+.veg.non{border-color:var(--nonveg)}
+.veg.non::after{background:var(--nonveg)}
+.item .body{flex:1;min-width:0}
+.item h3{font-family:var(--body);font-weight:700;font-size:1.02rem;margin:0;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.item .tag{font-family:var(--label);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);
+  background:color-mix(in srgb,var(--accent) 13%,transparent);border-radius:5px;padding:2px 6px}
+.item p{margin:4px 0 0;font-size:.86rem;color:var(--muted)}
+.item .price{font-family:var(--label);font-weight:600;font-size:1rem;color:var(--fg);white-space:nowrap;
+  font-variant-numeric:tabular-nums;padding-left:4px}
+.item .price.ask{color:var(--muted);font-size:.78rem;font-weight:500}
+.empty{text-align:center;color:var(--muted);padding:50px 20px;font-size:.95rem}
+.empty[hidden]{display:none}
+
+.note{margin:26px 2px 6px;font-size:.76rem;color:var(--muted);font-family:var(--label);letter-spacing:.02em;line-height:1.6}
+
+/* fixed action bar */
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:30;display:flex;justify-content:center;
+  padding:0 0 env(safe-area-inset-bottom,0px);pointer-events:none}
+.bar .in{width:100%;max-width:var(--col);display:flex;gap:8px;
+  padding:10px max(14px,env(safe-area-inset-left,0px)) 12px max(14px,env(safe-area-inset-right,0px));
+  background:color-mix(in srgb,var(--bg) 94%,transparent);backdrop-filter:blur(10px);border-top:1px solid var(--line);pointer-events:auto}
+.bar a{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;text-decoration:none;
+  font-family:var(--label);font-weight:600;font-size:.9rem;padding:.8em .5em;border-radius:12px;transition:transform .15s}
+.bar a:active{transform:scale(.97)}
+.bar .call{background:var(--accent);color:#fff}
+.bar .wa{background:#1faa55;color:#fff}
+.bar .dir{background:var(--surface);color:var(--fg);border:1.5px solid var(--line)}
+
+/* desktop framing */
+@media (min-width:540px){
+  body{padding:24px 0}
+  .app{border-radius:26px;overflow:hidden;min-height:0}
+  .app-head{padding-top:26px}
+  .controls{top:0}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+html{scroll-behavior:smooth}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header class="app-head">
+    <div class="in">
+      <div class="brand">
+        <span class="mark">H</span>
+        <span><b>Harvin's</b><small>Cafe · Bistro</small></span>
+      </div>
+      <div class="head-row">
+        <div class="menu-label">Digital Menu<strong>Eat &amp; Sip</strong></div>
+        <span class="pill" id="statusPill"><span class="dot"></span><span id="statusTxt">Open · 11am–11pm</span></span>
+      </div>
+    </div>
+  </header>
+
+  <div class="controls">
+    <label class="search">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/></svg>
+      <input id="search" type="search" inputmode="search" placeholder="Search the menu…" aria-label="Search menu">
+    </label>
+    <div class="chips" id="chips" role="group" aria-label="Menu categories">
+      <button data-cat="all" aria-pressed="true">All</button>
+      <button data-cat="coffee" aria-pressed="false">Coffee</button>
+      <button data-cat="coolers" aria-pressed="false">Coolers</button>
+      <button data-cat="shakes" aria-pressed="false">Shakes</button>
+      <button data-cat="food" aria-pressed="false">Food</button>
+    </div>
+  </div>
+
+  <main class="menu" id="menu">
+
+    <section class="cat" data-cat="coffee" id="cat-coffee">
+      <h2>Coffee &amp; Espresso <span class="cn">Hot &amp; Iced</span></h2>
+      <div class="item" data-name="lotus biscoff coffee">
+        <span class="veg"></span>
+        <div class="body"><h3>Lotus Biscoff Coffee <span class="tag">Bestseller</span></h3>
+          <p>Espresso swirled with Biscoff caramel and steamed milk.</p></div>
+        <span class="price">₹145</span>
+      </div>
+      <div class="item" data-name="classic cold brew">
+        <span class="veg"></span>
+        <div class="body"><h3>Classic Cold Brew</h3><p>Slow-steeped and smooth, served over ice.</p></div>
+        <span class="price">₹119</span>
+      </div>
+      <div class="item" data-name="harvins frappe">
+        <span class="veg"></span>
+        <div class="body"><h3>Harvin's Frappé <span class="tag">Signature</span></h3><p>Blended iced coffee with a thick, creamy cap.</p></div>
+        <span class="price">₹139</span>
+      </div>
+      <div class="item" data-name="iced jaggery coconut latte">
+        <span class="veg"></span>
+        <div class="body"><h3>Iced Jaggery Coconut Latte</h3><p>Cold espresso, coconut milk and gur.</p></div>
+        <span class="price">₹275</span>
+      </div>
+      <div class="item" data-name="cappuccino latte art">
+        <span class="veg"></span>
+        <div class="body"><h3>Cappuccino · Latte Art</h3><p>Balanced double shot under velvety microfoam.</p></div>
+        <span class="price ask">Ask server</span>
+      </div>
+    </section>
+
+    <section class="cat" data-cat="coolers" id="cat-coolers">
+      <h2>Coolers &amp; Mojitos <span class="cn">Refreshers</span></h2>
+      <div class="item" data-name="classic mojito">
+        <span class="veg"></span>
+        <div class="body"><h3>Classic Mojito</h3><p>Fresh mint, lime and soda — zero-proof.</p></div>
+        <span class="price">₹79</span>
+      </div>
+      <div class="item" data-name="blueberry mojito">
+        <span class="veg"></span>
+        <div class="body"><h3>Blueberry Mojito</h3><p>The classic with a burst of blueberry.</p></div>
+        <span class="price">₹109</span>
+      </div>
+      <div class="item" data-name="iced bitter blueberry">
+        <span class="veg"></span>
+        <div class="body"><h3>Iced Bitter Blueberry</h3><p>Deep blueberry over ice with a bitter edge.</p></div>
+        <span class="price ask">Ask server</span>
+      </div>
+    </section>
+
+    <section class="cat" data-cat="shakes" id="cat-shakes">
+      <h2>Shakes <span class="cn">Thick &amp; Cold</span></h2>
+      <div class="item" data-name="strawberry shake">
+        <span class="veg"></span>
+        <div class="body"><h3>Strawberry Shake <span class="tag">Crowd-pleaser</span></h3><p>Real strawberries blended thick and cold.</p></div>
+        <span class="price">₹149</span>
+      </div>
+    </section>
+
+    <section class="cat" data-cat="food" id="cat-food">
+      <h2>Food &amp; Bites <span class="cn">All day</span></h2>
+      <div class="item" data-name="burnt garlic noodles">
+        <span class="veg"></span>
+        <div class="body"><h3>Burnt Garlic Noodles <span class="tag">Must-try</span></h3><p>Wok-tossed with a smoky, moreish flavour.</p></div>
+        <span class="price">₹270</span>
+      </div>
+      <div class="item" data-name="avocado sandwich">
+        <span class="veg"></span>
+        <div class="body"><h3>Avocado Sandwich H's</h3><p>Smashed avocado and greens on toasted sourdough.</p></div>
+        <span class="price">₹206</span>
+      </div>
+      <div class="item" data-name="crispy chilli chicken stir fry">
+        <span class="veg non"></span>
+        <div class="body"><h3>Crispy Chilli Chicken</h3><p>Stir-fried crisp chicken in a sweet-heat glaze.</p></div>
+        <span class="price ask">Ask server</span>
+      </div>
+      <div class="item" data-name="creamy pasta alfredo">
+        <span class="veg"></span>
+        <div class="body"><h3>Creamy Pasta</h3><p>Silky white sauce, herbs and parmesan.</p></div>
+        <span class="price ask">Ask server</span>
+      </div>
+      <div class="item" data-name="burrito bowl">
+        <span class="veg"></span>
+        <div class="body"><h3>Burrito Bowl</h3><p>Rice, beans, salsa and fresh toppings.</p></div>
+        <span class="price ask">Ask server</span>
+      </div>
+    </section>
+
+    <p class="empty" id="empty" hidden>No items match your search.</p>
+
+    <p class="note">Veg <span style="display:inline-grid;place-items:center;width:12px;height:12px;border:1.5px solid var(--veg);border-radius:3px;vertical-align:-2px"><span style="width:5px;height:5px;border-radius:50%;background:var(--veg)"></span></span>
+      · Non-veg <span style="display:inline-grid;place-items:center;width:12px;height:12px;border:1.5px solid var(--nonveg);border-radius:3px;vertical-align:-2px"><span style="width:5px;height:5px;border-radius:50%;background:var(--nonveg)"></span></span>.
+      Prices are indicative and may change. Items marked "Ask server" are available — please check today's price. Full menu &amp; specials in-store.</p>
+  </main>
+
+  <nav class="bar">
+    <div class="in">
+      <a class="call" href="tel:+917007221008"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5c0 8 7 15 15 15l0-3.5-4-1.5-2 2a12 12 0 0 1-6-6l2-2L11.5 5 8 5a3 3 0 0 0-4 0z"/></svg>Call</a>
+      <a class="wa" href="https://wa.me/917007221008?text=Hi%20Harvin%27s%2C%20I%27d%20like%20to%20order." target="_blank" rel="noopener"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.7 4.8-1.3A10 10 0 1 0 12 2zm0 2a8 8 0 1 1-4.1 14.9l-.3-.2-2.8.7.7-2.7-.2-.3A8 8 0 0 1 12 4zm4.5 10.3c-.2-.1-1.4-.7-1.6-.8s-.4-.1-.5.1-.6.8-.8 1-.3.2-.5.1a6.5 6.5 0 0 1-3.2-2.8c-.2-.4.2-.4.6-1.2.1-.1 0-.3 0-.4l-.7-1.7c-.2-.5-.4-.4-.5-.4h-.5a1 1 0 0 0-.7.3A3 3 0 0 0 6.9 11a5.6 5.6 0 0 0 1.2 3 11 11 0 0 0 4.2 3.7c1.5.6 2 .6 2.8.5a2.4 2.4 0 0 0 1.6-1.1 2 2 0 0 0 .1-1.1c0-.1-.2-.2-.5-.3z"/></svg>WhatsApp</a>
+      <a class="dir" href="https://www.google.com/maps/search/?api=1&query=Harvin%27s+Cafe+%26+Bistro+Vikas+Nagar+Lucknow" target="_blank" rel="noopener"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-5.6-7-11a7 7 0 1 1 14 0c0 5.4-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>Directions</a>
+    </div>
+  </nav>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var d=document;
+  var chips=d.getElementById('chips'), search=d.getElementById('search');
+  var cats=Array.prototype.slice.call(d.querySelectorAll('.cat'));
+  var items=Array.prototype.slice.call(d.querySelectorAll('.item'));
+  var empty=d.getElementById('empty');
+  var curCat='all';
+
+  function apply(){
+    var q=(search.value||'').trim().toLowerCase();
+    var any=false;
+    items.forEach(function(it){
+      var inCat=curCat==='all'||it.closest('.cat').getAttribute('data-cat')===curCat;
+      var inQ=!q||(it.getAttribute('data-name').indexOf(q)>-1);
+      var show=inCat&&inQ;
+      it.hidden=!show; if(show) any=true;
+    });
+    cats.forEach(function(c){
+      var visible=c.querySelectorAll('.item:not([hidden])').length>0;
+      c.hidden=!visible;
+    });
+    empty.hidden=any;
+  }
+
+  chips.addEventListener('click',function(e){
+    var b=e.target.closest('button'); if(!b) return;
+    chips.querySelectorAll('button').forEach(function(x){x.setAttribute('aria-pressed','false');});
+    b.setAttribute('aria-pressed','true');
+    curCat=b.getAttribute('data-cat');
+    apply();
+    if(curCat!=='all'){ var sec=d.getElementById('cat-'+curCat); if(sec) sec.scrollIntoView({behavior:'smooth',block:'start'}); }
+    else { window.scrollTo({top:0,behavior:'smooth'}); }
+  });
+  search.addEventListener('input',apply);
+
+  /* open/closed */
+  var now=new Date(), h=now.getHours()+now.getMinutes()/60;
+  var open=h>=11&&h<23;
+  var pill=d.getElementById('statusPill'), txt=d.getElementById('statusTxt');
+  if(txt){ txt.textContent=open?'Open now · 11am–11pm':'Closed · opens 11am'; if(!open&&pill) pill.classList.add('closed'); }
+})();
+</script>
+</body>
+</html>
